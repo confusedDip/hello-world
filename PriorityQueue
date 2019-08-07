@@ -41,6 +41,7 @@ void insert(int val,int prior)
     else
     {
         ptr1=front;
+        ptr2=front;
         if(ptr1->priority > node->priority)
         {
             node->next = ptr1;
@@ -50,9 +51,10 @@ void insert(int val,int prior)
         {
             while(ptr1->priority <= node->priority && ptr1->next!=NULL)
             {
+                ptr2=ptr1;
                 ptr1=ptr1->next;
             }
-            if(ptr1->next==NULL)
+            if(ptr1->next==NULL && ptr1->priority<= node->priority)
              {
 
                 ptr1->next=node;
@@ -61,8 +63,8 @@ void insert(int val,int prior)
              }
              else
              {
-                node->next=ptr1->next;
-                ptr1->next=node;
+                node->next=ptr1;
+                ptr2->next=node;
              }
 
         }
@@ -96,17 +98,27 @@ int delete_by_prior(void)
 }
 int main()
 {
-    insert(10,3);
-    insert(20,2);
-    insert(50,4);
-    insert(30,2);
-    insert(40,1);
-
-    insert(60,4);
-    printf("Data Deleted: %d\n",delete_by_prior());
-    display();
-    printf("Data Deleted: %d\n",delete_by_prior());
-    display();
-    printf("Data Deleted: %d\n",delete_by_prior());
-    display();
+    int ch,val,prior;
+    while(1)
+    {
+        printf("!.Insert according to Priority\n2,Delete according to Priority\n3.Display\n4.Exit\nChoose your option: ");
+        scanf("%d",&ch);
+        switch(ch)
+        {
+        case 1:
+            printf("Enter data and its priority: ");
+            scanf("%d %d",&val,&prior);
+            insert(val,prior);
+            break;
+        case 2:
+            printf("Data Deleted: %d\n",delete_by_prior());
+            break;
+        case 3:
+            display();
+        case 4:
+                exit(1);
+        default:
+            printf("Wrong Choice!\n");
+        }
+    }
 }
