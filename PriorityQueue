@@ -1,1 +1,112 @@
+#include <stdio.h>
+#include <stdlib.h>
 
+struct node
+{
+    int data;
+    int priority;
+    struct node* next;
+};
+struct node* rear=NULL;
+struct node* front=NULL;
+//Function to display elements
+void display()
+{
+    if(front==NULL)
+        printf("Nothing to show\n");
+    else
+    {
+        printf("The Queue is:\n");
+        struct node* ptr=front;
+        while(ptr!=NULL)
+        {
+            printf("%d with Priority %d\n",ptr->data,ptr->priority);
+            ptr=ptr->next;
+        }
+    }
+}
+//Function to insert according to priority
+void insert(int val,int prior)
+{
+    struct node* node=(struct node*)malloc(sizeof(struct node));
+    struct node* ptr1, *ptr2;
+    node->data=val;
+    node->priority=prior;
+    node->next=NULL;
+    if(rear==NULL && front==NULL)
+    {
+        front=node;
+        rear=node;
+    }
+    else
+    {
+        ptr1=front;
+        if(ptr1->priority > node->priority)
+        {
+            node->next = ptr1;
+            front=node;
+        }
+        else
+        {
+            while(ptr1->priority <= node->priority && ptr1->next!=NULL)
+            {
+                ptr1=ptr1->next;
+            }
+            if(ptr1->next==NULL)
+             {
+
+                ptr1->next=node;
+                node->next=NULL;
+                rear=node;
+             }
+             else
+             {
+                node->next=ptr1->next;
+                ptr1->next=node;
+             }
+
+        }
+    }
+    display();
+}
+//function to delete highest priority element
+int delete_by_prior(void)
+{
+    int val=-1;
+    if(front==NULL)
+        printf("Queue is Empty!\n");
+    else
+    {
+        struct node* node=(struct node*)malloc(sizeof(struct node));
+        node=front;
+        val=node->data;
+        if(node->next == NULL)
+        {
+            rear=NULL;
+            front=NULL;
+        }
+        else
+        {
+            front=node->next;
+            node->next=NULL;
+        }
+        return val;
+    }
+
+}
+int main()
+{
+    insert(10,3);
+    insert(20,2);
+    insert(50,4);
+    insert(30,2);
+    insert(40,1);
+
+    insert(60,4);
+    printf("Data Deleted: %d\n",delete_by_prior());
+    display();
+    printf("Data Deleted: %d\n",delete_by_prior());
+    display();
+    printf("Data Deleted: %d\n",delete_by_prior());
+    display();
+}
