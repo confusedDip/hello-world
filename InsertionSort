@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void swap(int *x, int *y)
+{
+    int temp= *x;
+    *x= *y;
+    *y= temp;
+}
+
+void Insertion_sort(int *a,int n)
+{
+    int val,i,hole;
+    for(i=1;i<n;i++)
+    {
+        val=a[i];
+        hole=i;
+        while(hole)
+        {
+            if(a[hole-1]>a[hole])
+            {
+                swap(&a[hole-1],&a[hole]);
+                hole--;
+            }
+            else
+                break;
+        }
+        a[hole]=val;
+    }
+}
+
+int main()
+{
+    int n;
+    printf("Enter the value of n: ");
+    scanf("%d",&n);
+    int arr[n],i;
+    printf("Enter the elements: \n");
+    for(i=0;i<n;i++)
+    {
+        scanf("%d",&arr[i]);
+    }
+    Insertion_sort(arr,n);
+    printf("The Sorted Array:\n");
+    for(i=0;i<n;i++)
+        printf("|%d|",arr[i]);
+}
