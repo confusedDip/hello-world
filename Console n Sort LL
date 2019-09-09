@@ -9,32 +9,56 @@ struct node
 };
 struct node* head=NULL;
 
-void del(int data)
+//List of Functions
+void display();
+void append(int);
+void INSBEF(int data, int target);
+struct node* del(int);
+void distinct();
+
+struct node* del(int data)
 {
-	struct node *prev, *current;
-    current=head;
-    if(current->data==data)
+    struct node* curr= head, *prev=head;
+    if(curr->data==data)
     {
-    	head=current->next;
+        head=curr->next;
+        free(curr);
+        return head;
     }
+
     else
     {
-    	current=current->next;
-    	while(current!=NULL)
-    	{
-        	if(current->data==data)
-        	    break;
-        	else
-        	{
-            	prev=current;
-            	current=current->next;
-        	}
+        curr=curr->next;
+        while(curr!=NULL)
+        {
+            if(curr->data==data)
+                break;
+            else
+            {
+                prev=curr;
+                curr=curr->next;
+            }
         }
-        prev->next=current->next;
+        prev->next=curr->next;
+        free(curr);
+        return (prev->next);
     }
-    free(current);
-    display();
+
 }
+
+void distinct()
+{
+    struct node* curr=head;
+    while(curr->next!=NULL)
+    {
+        if(curr->data == curr->next->data){
+            curr=del(curr->data);
+        }
+        else
+            curr=curr->next;
+    }
+}
+
 
 void append(int data)
 {
@@ -97,24 +121,6 @@ void display()
     printf("NULL\n");
 }
 
-void distinct()
-{
-	struct node* curr=head;
-	while(curr->next!=NULL)
-	{
-		if(curr->data == curr->next->data)
-		{
-		printf("\t\tSame data deleted\n");
-			del(curr->data);
-			
-			curr=head;
-		}
-		else
-			curr=curr->next;
-	}
-}
-		
-
 int main(int argc , char *argv[])
 {
     int i=0,j=0,num=0;
@@ -162,7 +168,7 @@ int main(int argc , char *argv[])
             }
     	}
     }
-    //distinct();
+    distinct();
     printf("The List after sorting:\n");
     display();
 }
