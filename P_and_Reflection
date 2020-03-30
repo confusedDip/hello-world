@@ -1,0 +1,96 @@
+#include<GL/glut.h>
+#include<stdio.h>
+#include<math.h>
+
+#define pi 3.14
+double X, Y, X00, Y00, X10, Y10, X01, X11;
+
+
+void myInit(void)
+{
+    glClearColor(1.0, 1.0, 1.0,1.0); // sets the bg color, first three parameters are rgb values, last one makes the bg opaque
+    glColor3f(0.0, 0.0, 0.0); // sets the color of the picture
+
+    glPointSize(1.0); // sets the point size
+}
+
+void display()
+{
+    glClear(GL_COLOR_BUFFER_BIT); //clear the color buffer
+    // define shapes enclosed within glBegin and glEnd
+
+
+
+    // Draw 'P'
+    glBegin(GL_LINES);
+    glColor3f(0.0, 0.0, 0.0);
+    glVertex2d(X00, Y00);
+    glVertex2d(X10, Y10);
+    glEnd();
+    double xr = X00;
+    double yr = Y10 * 3 / 4;
+    double r = Y / 4;
+    double Xx, Yy;
+    glBegin(GL_POINTS);
+    for (double angle = -(pi/2); angle <= (pi/2); angle += .01)
+    {
+        Xx = xr + r * cos(angle);
+        Yy = yr + r * sin(angle);
+        glVertex2d(Xx, Yy);
+    }
+    glEnd();
+  
+    // Draw the mirror axis
+    glBegin(GL_LINES);
+    glColor3f(0.0, 0.0, 0.0);
+    glVertex2d(X, Y00 -100);
+    glVertex2d(X, Y10 + 100);
+    glEnd();
+
+
+    // Draw the Mirror Image of 'P'
+    glBegin(GL_LINES);
+        glVertex2d( X00 + 2 * (X - X00), Y00);
+        glVertex2d(X00 + 2 * (X - X00), Y10);
+    glEnd();
+    glBegin(GL_POINTS);
+    for (double angle = -(pi/2); angle <= (pi/2); angle += 0.01)
+    {
+        //Xx = -( xr + r * cos(angle)) + 2 * (X - X00);
+        Xx = -(xr + r * cos(angle) - X00) + (X+ X - X00);
+        Yy = yr + r * sin(angle);
+        //Xx = -Xx;
+        glVertex2d(Xx , Yy);
+    }
+    glEnd();
+
+
+
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-780, 780, -420, 420);
+    glFlush(); // Render now
+}
+
+
+int main(int argc, char** argv)
+{
+    printf("Enter the coordinates of the base of P: ");
+    scanf_s("%lf %lf", &X00, &Y00);
+    printf("Enter the length of the P: ");
+    scanf_s("%lf", &Y);
+    X10 = X00;
+    Y10 = Y00 + Y;
+    printf("We consider mirror parallel to y axis, give x value: ");
+    scanf_s("%lf", &X);
+    glutInit(&argc, argv); //Initialises the GLUT
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB); // Set the display mode
+    glutInitWindowSize(680, 1200);   // Set the window size
+    glutInitWindowPosition(0, 0); // Set the window position
+    glutCreateWindow("My Window!");  // Creation of window and naming
+    myInit();
+    glutDisplayFunc(display); // Register display callback handler
+    glutMainLoop(); // Event loop
+    return 0;
+}
